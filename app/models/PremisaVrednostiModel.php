@@ -1,4 +1,4 @@
 <?php
-class PremisakVrednostiModel extends Model {
+class PremisaVrednostiModel extends Model {
     protected $table = 'premisa_vrednosti';
 }

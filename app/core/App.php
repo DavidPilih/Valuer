@@ -7,7 +7,7 @@ class App
     private function split_url()
     {
         $URL = $_GET['url'] ?? 'home';
-        $URL = explode('/', $URL);
+        $URL = explode('/', trim($URL));
         return $URL;
     }
 
@@ -15,7 +15,7 @@ class App
     public function loadController()
     {
         $URL = $this->split_url();
-
+        $method = 
         $filename = "../app/controllers/" . ucfirst($URL[0]) . ".php";
         if (file_exists($filename)) {
             require $filename;
@@ -24,11 +24,11 @@ class App
             require "../app/controllers/_404.php";
             $this->controller= '_404';
         }
-        show($this->controller);
         $controller = new $this->controller;
-        var_dump($controller);
-        var_dump($this->method);
-        call_user_func([$controller, $this->method], ['a' => "somevalue"]);
+        if(!empty($URL[1]) && method_exists($controller, $URL[1])){
+            $this->method =$URL[1];
+        }
+        call_user_func([$controller, $this->method], [$URL]);
 
     }
 

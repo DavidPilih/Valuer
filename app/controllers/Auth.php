@@ -75,4 +75,27 @@ class Auth extends Controller
         session_destroy();
         header('Location: /auth/prijava');
     }
+
+    public function spremembaGesla(){
+        if($_SERVER['REQUEST_METHOD']=='POST'){
+            $staroGeslo = $_POST['staro_geslo'];
+            $novoGeslo = $_POST['novo_geslo'];
+            $uporabnikiModel = new UporabnikiModel();
+            $uporabnik = $uporabnikiModel->one(['id'=>$_SESSION['uporabnik']['id']]);
+            if(password_verify($staroGeslo, $uporabnik->geslo)){
+                if(!$uporabnikiModel->update(['geslo'=>password_hash($novoGeslo, PASSWORD_DEFAULT)], $_SESSION['uporabnik']['id'])){
+                    $napaka= "Prišlo je do napake, prosim poskusite ponovno";
+                    $this->view('spremembaGesla', ['napaka'=>$napaka]);
+                }else{
+                    session_destroy();
+                    header('Location: /auth/prijava');
+                }
+            }else{
+                    $napaka= "Vnešeno geslo je napačno";
+                    $this->view('spremembaGesla', ['napaka'=>$napaka]);
+            }
+            
+        }else{
+        $this->view('spremembaGesla');
+    }}
 }

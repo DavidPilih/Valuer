@@ -1,0 +1,41 @@
+
+#logo{
+    width:5%;
+}
+.nav-item .nav-link {
+    font-size: larger;
+    font-weight: bolder;
+}
+
+.navbar-brand{
+    font-size:xx-large;
+    font-weight: bolder;
+    color:#b89342
+}
+
+.bg-rjava {
+    background-color: #b89342
+}
+
+ul{
+    margin-left:5%;
+    margin-right:5%
+}
+
+.uporabnik_form{
+    margin-left:15%;
+    margin-right:15%;
+    margin-top:2%;
+    border-style:solid;
+    border-width: 1px;
+    border-radius: 30px;
+    border-color:#b7b7b7;;
+    background-color:#f8f9fa;
+    padding: 2%;
+}
+
+.ba{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

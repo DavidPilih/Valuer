@@ -1,13 +1,11 @@
 <?php
 
-class Database {
+trait Database {
     private $host = "db";
     private $db_name = "app_db";
     private $username = "user";
     private $password = "pass";
     private $conn;
-
-    // Metoda, ki vzpostavi povezavo in jo vrne
     public function connect() {
         $this->conn = null;
 
@@ -27,17 +25,30 @@ class Database {
         return $this->conn;
     }
 
-    public function query($query, $data = []) {
-        $con = $this->connect();
-        $stm = $con->prepare($query);
+public function query($query, $data = []) {
 
-        $check = $stm->execute($data);
-        if ($check) {
-            $result = $stm->fetchAll();
-            if (is_array($result) && count($result) > 0) {
-                return $result;
-            }
-        }
+    $con = $this->connect();
+    $stm = $con->prepare($query);
+
+    $check = $stm->execute($data);
+
+    if(!$check){
         return false;
     }
+
+    $queryType = strtoupper(strtok(trim($query), " "));
+
+    switch($queryType){
+
+        case 'SELECT':
+            return $stm->fetchAll();
+
+        case 'INSERT':
+            return $con->lastInsertId();
+
+        default:
+            return true;
+    }
+}
+
 }

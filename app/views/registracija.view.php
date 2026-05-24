@@ -1,33 +1,55 @@
-<div>
-<img src="/assets/images/user_icon.png" alt="prijavna ikona">
-<h2>Dobrodošli nazaj</h2>
-<p>za nadaljevanje se prosim prijavite</p>
+<script src="/assets/js/auth.js" defer></script>
+<div class="uporabnik_form">
+    <h2>Dobrodošli</h2>
+    <p>Za nadaljevanje se prosim registrirajte</p>
 <form action="/auth/registracija" method="POST">
 
-<label for="ime">Ime</label>
-<input type="text" id="ime" name="ime" placeholder="Ime" required>
+    <div class="mb-3">
+        <label for="ime" class="form-label">Ime</label>
+        <input type="text" id="ime" name="ime" class="form-control" required>
+    </div>
 
-<label for="priimek">Priimek</label>
-<input type="text" id="priimek" name="priimek" placeholder="Priimek" required>
+    <div class="mb-3">
+        <label for="priimek" class="form-label">Priimek</label>
+        <input type="text" id="priimek" name="priimek" class="form-control" required>
+    </div>
 
-<label for="email">E-poštni naslov</label>
-<input type="text" id="email" name="email" placeholder="E-poštni naslov" required>
+    <div class="mb-3">
+        <label for="email" class="form-label">E-poštni naslov</label>
+        <input type="email" id="email" name="email" class="form-control" required>
+    </div>
 
-        <label for="geslo">Geslo</label>
-        <input type="password" id="geslo" name="geslo" placeholder="Geslo" required>
+    <div class="mb-3">
+        <label for="novo_geslo" class="form-label">Geslo</label>
+        <input type="password" id="novo_geslo" name="geslo" class="form-control" required>
+        <div id="geslo_napaka" class="text-danger mt-1" style="display:none;"></div>
+    </div>
 
-        <label>
-            <input type="checkbox" name="zapomni"> Zapomni si me
+    <div class="mb-3">
+        <label for="ponovno_geslo" class="form-label">Ponovni vnos gesla</label>
+        <input type="password" id="ponovno_geslo" name="ponovno_geslo" class="form-control">
+        <div id="ponovitev_napaka" class="text-danger mt-1" style="display:none;"></div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-check-label">
+            <input type="checkbox" name="zapomni" class="form-check-input"> Zapomni si me
         </label>
+    </div>
 
-        <a href="/pozabljeno-geslo">Pozabljeno geslo?</a>
+    <div class = "ba">
+    <a href="/pozabljeno-geslo" class="d-block mb-3">Pozabljeno geslo?</a>
 
-        <button type="submit">Registracija</button>
+    <button type="submit" id="gumb_potrdi" class="btn btn-primary" disabled>Registracija</button>
+    </div>
+</form>
 
-    </form>
-
-    <p>Že imate račun? <a href="/auth/prijava">Prijava</a></p>
+<div class = "ba">
+<p class="mt-3">Že imate račun? <a href="/auth/prijava">Prijava</a></p>
 </div>
 <?php if(isset($napaka)): ?>
-    <p><?= $napaka ?></p>
+    <div class="alert alert-danger mt-3" role="alert">
+        <?= $napaka ?>
+    </div>
 <?php endif; ?>
+</div>
