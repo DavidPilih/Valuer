@@ -1,5 +1,4 @@
 
-<script src="/assets/js/auth.js" defer></script>
 <div class="uporabnik_form">
 <form action="/auth/spremembaGesla" method="POST">
     <h2>Sprememba gesla</h2>
@@ -11,7 +10,7 @@
 
 <div class="mb-3">
     <label for="novo_geslo" class="form-label">Geslo</label>
-    <input type="password" id="novo_geslo" name="geslo" class="form-control" required aria-describedby="gesloHelp">
+    <input type="password" id="novo_geslo" name="novo_geslo" class="form-control" required aria-describedby="gesloHelp">
     <div id="gesloHelp" class="form-text">
         Vaše geslo mora biti dolgo 8–20 znakov, vsebovati mora črke in številke ter ne sme vsebovati presledkov, posebnih znakov ali emojijev.
     </div>
@@ -28,6 +27,5 @@
 
 </form>
 </div>
-<?php if(isset($napaka)): ?>
-<p><?= $napaka?></p>
-<?php endif; ?>
+
+<script src="/assets/js/auth.js" defer></script>

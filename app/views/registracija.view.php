@@ -1,4 +1,3 @@
-<script src="/assets/js/auth.js" defer></script>
 <div class="uporabnik_form">
     <h2>Dobrodošli</h2>
     <p>Za nadaljevanje se prosim registrirajte</p>
@@ -47,9 +46,5 @@
 <div class = "ba">
 <p class="mt-3">Že imate račun? <a href="/auth/prijava">Prijava</a></p>
 </div>
-<?php if(isset($napaka)): ?>
-    <div class="alert alert-danger mt-3" role="alert">
-        <?= $napaka ?>
-    </div>
-<?php endif; ?>
-</div>
+<script src="/assets/js/auth.js" defer></script>
+

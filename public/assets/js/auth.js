@@ -59,3 +59,4 @@ function validirajGeslo(geslo) {
     if (/[^a-zA-Z0-9]/.test(geslo)) return 'Geslo ne sme vsebovati posebnih znakov.';
     return null;
 }
+

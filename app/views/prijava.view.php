@@ -32,10 +32,5 @@
     <div class="text-center">
         <p class="mt-3">Nimate računa? <a href="/auth/registracija">Registracija</a></p>
     </div>
-    
-<?php if(isset($napaka)): ?>
-    <div class="alert alert-danger mt-3" role="alert">
-        <?= $napaka ?>
-    </div>
-<?php endif; ?>
+
 </div>

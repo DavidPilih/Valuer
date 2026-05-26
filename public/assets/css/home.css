@@ -1,0 +1,31 @@
+.kontakt-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 2s ease, transform 2s ease;
+}
+ 
+.kontakt-item.vidno {
+    opacity: 1;
+    transform: translateY(0);
+}
+ 
+.kontakt-item:nth-child(2) {
+    transition-delay: 0.15s;
+}
+ 
+.kontakt-item:nth-child(3) {
+    transition-delay: 0.3s;
+}
+ 
+.box {
+    animation: fadeIn 3s ease backwards;
+}
+ 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

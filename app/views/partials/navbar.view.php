@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" >
     <div class="container-fluid">
         <img id="logo" src="/assets/images/logo.png" alt="logo">
         <a class="navbar-brand" href="/">Valuer</a>
@@ -8,14 +8,13 @@
                 <a class="nav-link" href="/">Domov</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/Cenitve">Cenitve</a>
-            </li>
-            <li class="nav-item">
+            <?php if (isset($_SESSION['uporabnik'])): ?>
                 <a class="nav-link" href="/Cenitve">Cenitve</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/Cenitve/fill">FILL IZBRISI</a>
             </li>
+            <?php endif; ?>
         </ul>
 
         <ul class="navbar-nav flex-row gap-5 ms-auto">

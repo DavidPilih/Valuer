@@ -2,164 +2,166 @@
 
 class Cenitve extends Controller
 {
-    public function fill(){//ZBRISI VEN
-    $setup = new SetUp();
-    $setup->reset();
-    $this->view('Home');
-    }
-    public function index()
+    private CenitveModel $cenitveModel;
+    private NamenCenitveModel $namenModel;
+    private PodlagaVrednostiModel $podlagaModel;
+    private PremisaVrednostiModel $premisaModel;
+    private UporabnikiModel $uporabnikiModel;
+
+    public function __construct()
     {
-        $cenitveModel = new CenitveModel();
-        $cenitve = $cenitveModel->getAllWithRelations();
-        $this->view('cenitve', ['cenitve' => $cenitve]);
+        $this->cenitveModel = new CenitveModel();
+        $this->namenModel = new NamenCenitveModel();
+        $this->podlagaModel = new PodlagaVrednostiModel();
+        $this->premisaModel = new PremisaVrednostiModel();
+        $this->uporabnikiModel = new UporabnikiModel();
     }
 
-    public function cenitev($par)
+    private function redirect($url)
     {
-        $cenitveModel = new CenitveModel();
-        $id = $par[0][2];
-        $cenitev = $cenitveModel->getWithRelations($id);
-        $this->view('cenitev', ['cenitev' => $cenitev]);
+        header("Location: $url");
+        exit;
+    }
+
+    private function json($data)
+    {
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        exit;
+    }
+
+    public function fill()
+    {
+        $setup = new SetUp();
+        $setup->reset();
+        $this->view('Home');
+    }
+
+    public function index()
+    {
+        $cenitve = $this->cenitveModel->getAllWithRelations();
+
+        $this->view('cenitve', [
+            'cenitve' => $cenitve,
+            'uspeh' => $_SESSION['uspeh'] ?? null,
+            'napaka' => $_SESSION['napaka'] ?? null,
+            'nameni' => $this->namenModel->all(),
+            'podlage' => $this->podlagaModel->all(),
+            'premise' => $this->premisaModel->all(),
+            'uporabniki' => $this->uporabnikiModel->all()
+    ]);
+
+        unset($_SESSION['uspeh'], $_SESSION['napaka']);
+    }
+
+    public function cenitev($id)
+    {
+        $id = $id[0];
+        $cenitev = $this->cenitveModel->getWithRelations($id);
+
+
+        $this->view('cenitev', [
+            'cenitev' => $cenitev
+        ]);
     }
 
     public function dodajCenitev()
     {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        $namenModel = new NamenCenitveModel();
-        $podlagaModel = new PodlagaVrednostiModel();
-        $premisakModel = new PremisaVrednostiModel();
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $cenitveModel = new CenitveModel();
-            $postNazivNarocnika = $_POST['naziv_narocnika'] ?? '';
-            $postNaslovNarocnika = $_POST['naslov_narocnika'] ?? '';
-            $postNamenId = $_POST['namen_id'] ?? '';
-            $postPodlagaId = $_POST['podlaga_id'] ?? '';
-            $postPremisaId = $_POST['premisa_id'] ?? '';
-            $postPrviOgled = $_POST['prvi_ogled'] ?? '';
-            $userId = $_SESSION['uporabnik']['id'];
-            #cenitve (user_id, naziv_narocnika, naslov_narocnika, namen_id, podlaga_id, premisa_id, prvi_ogled
-            $nova_cenitev = $cenitveModel->insert([
-                'uporabnik_id' => $userId,
-                'naziv_narocnika' => $postNazivNarocnika,
-                'naslov_narocnika' => $postNaslovNarocnika,
-                'namen_id' => $postNamenId,
-                'podlaga_id' => $postPodlagaId,
-                'premisa_id' => $postPremisaId,
-                'prvi_ogled' => $postPrviOgled
+            $ok = $this->cenitveModel->insert([
+                'uporabnik_id' => $_SESSION['uporabnik']['id'],
+                'naziv_narocnika' => $_POST['naziv_narocnika'] ?? '',
+                'naslov_narocnika' => $_POST['naslov_narocnika'] ?? '',
+                'namen_id' => $_POST['namen_id'] ?? null,
+                'podlaga_id' => $_POST['podlaga_id'] ?? null,
+                'premisa_id' => $_POST['premisa_id'] ?? null,
+                'prvi_ogled' => $_POST['prvi_ogled'] ?? null
             ]);
-            $cenitve = $cenitveModel->getAllWithRelations();
-            if (!$nova_cenitev) {
-                $napaka = "Prišlo je do napake. Poskusite znova.";
-                $this->view('cenitve', ['cenitve' => $cenitve, 'napaka' => $napaka]);
-            } else {
-                $this->view('cenitve', ['cenitve' => $cenitve]);
-            }
-        } else {
 
-            $this->view('dodajCenitev', [
-                'nameni' => $namenModel->all(),
-                'podlage' => $podlagaModel->all(),
-                'premise' => $premisakModel->all()
-            ]);
+            if (!$ok) $_SESSION['napaka'] = "Prišlo je do napake. Poskusite znova.";
+            else $_SESSION['uspeh'] = "Cenitev uspešno dodana";
+            
+            $this->redirect('/cenitve');
         }
+
+        $this->view('dodajCenitev', [
+            'nameni' => $this->namenModel->all(),
+            'podlage' => $this->podlagaModel->all(),
+            'premise' => $this->premisaModel->all()
+        ]);
     }
 
-
-
-    public function urediCenitev($par)
+    public function urediCenitev($id)
     {
-        $id = $par[0][2];
-        $cenitveModel = new CenitveModel();
-        $namenModel = new NamenCenitveModel();
-        $podlagaModel = new PodlagaVrednostiModel();
-        $premisaModel = new PremisaVrednostiModel();
-        $nameni = $namenModel->all();
-        $podlage = $podlagaModel->all();
-        $premise = $premisaModel->all();
-        $cenitev = $cenitveModel->getWithRelations($id);
+        $id = $id[0] ?? null;
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $postNazivNarocnika = $_POST['naziv_narocnika'] ?? '';
-            $postNaslovNarocnika = $_POST['naslov_narocnika'] ?? '';
-            $postNamenId = $_POST['namen_id'] ?? '';
-            $postPodlagaId = $_POST['podlaga_id'] ?? '';
-            $postPremisaId = $_POST['premisa_id'] ?? '';
-            $postPrviOgled = $_POST['prvi_ogled'] ?? '';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $rezultat = $cenitveModel->update([
-                'naziv_narocnika' => $postNazivNarocnika,
-                'naslov_narocnika' => $postNaslovNarocnika,
-                'namen_id' => $postNamenId,
-                'podlaga_id' => $postPodlagaId,
-                'premisa_id' => $postPremisaId,
-                'prvi_ogled' => $postPrviOgled
+            $ok = $this->cenitveModel->update([
+                'naziv_narocnika' => $_POST['naziv_narocnika'] ?? '',
+                'naslov_narocnika' => $_POST['naslov_narocnika'] ?? '',
+                'namen_id' => $_POST['namen_id'] ?? null,
+                'podlaga_id' => $_POST['podlaga_id'] ?? null,
+                'premisa_id' => $_POST['premisa_id'] ?? null,
+                'prvi_ogled' => $_POST['prvi_ogled'] ?? null
             ], $id);
 
-            if ($rezultat) {
-                header('Location: /cenitve');
-            } else {
-                $napaka = "Prišlo je do napake. Poskusite znova.";
-            }
-        } else {
-            $this->view('urediCenitev', ['cenitev' => $cenitev, 'nameni' => $nameni, 'podlage' => $podlage, 'premise' => $premise]);
-        }
+            if ($ok) $_SESSION['uspeh'] = "Cenitev uspešno urejena.";
+            else $_SESSION['napaka'] = "Prišlo je do napake.";
+
+            $this->redirect('/cenitve');
+        }else{
+        $this->view('urediCenitev', [
+            'cenitev' => $this->cenitveModel->getWithRelations($id),
+            'nameni' => $this->namenModel->all(),
+            'podlage' => $this->podlagaModel->all(),
+            'premise' => $this->premisaModel->all()
+        ]);}
     }
 
-    public function brisiCenitev($par)
+    public function brisiCenitev($id)
     {
-        $cenitveModel = new CenitveModel();
-        $id = $par[0][2];
-        $rezultat = $cenitveModel->softDelete($id);
-        header('Content-Type: application/json');
-        echo json_encode(['success' => $rezultat]);
+        $id = $id[0] ?? null;
+        $rezultat = $this->cenitveModel->softDelete($id);
+        $this->json(['success' => $rezultat]);
     }
-    public function trajnoBrisiCenitev($par)
+
+    public function trajnoBrisiCenitev($id)
     {
-        $cenitveModel = new CenitveModel();
-        $id = $par[0][2];
-        $rezultat = $cenitveModel->delete($id);
-        header('Content-Type: application/json');
-        echo json_encode(['success' => $rezultat]);
+        $id = $id[0] ?? null;
+        $rezultat = $this->cenitveModel->delete($id);
+        $this->json(['success' => $rezultat]);
     }
 
     public function brisiCenitve()
     {
         $body = json_decode(file_get_contents('php://input'), true);
-        $zaIzbris = $body['zaIzbris'];
-        $trajnoIzbrisi = $body['trajnoIzbrisi'] ?? false;
-
-        $cenitveModel = new CenitveModel();
-        if ($trajnoIzbrisi) {
-            $rezultat = $cenitveModel->deleteMultiple($zaIzbris);
-        } else {
-            $rezultat = $cenitveModel->softDeleteMultiple($zaIzbris);
-        }
-        header('Content-Type: application/json');
-        echo json_encode(['success' => $rezultat]);
+        $rezultat = $this->cenitveModel->softDeleteMultiple($body['zaIzbris']);
+        $this->json(['success' => $rezultat]);
     }
 
     public function izbrisaneCenitve()
     {
-        $cenitveModel = new CenitveModel();
-        $cenitve = $cenitveModel->getAllWithRelations(1);
-        $this->view('cenitve', ['cenitve' => $cenitve, 'izbrisane' => true]);
+        $cenitve = $this->cenitveModel->getAllWithRelations(1);
+
+        $this->view('cenitve', [
+            'cenitve' => $cenitve,
+            'izbrisane' => true
+        ]);
     }
-    public function obnoviCenitev($par)
+
+    public function obnoviCenitev($id)
     {
-        $cenitveModel = new CenitveModel();
-        $id = $par[0][2];
-        $rezultat = $cenitveModel->restore($id);
-        header('Content-Type: application/json');
-        echo json_encode(['success' => $rezultat]);
+        $id = $id[0] ?? null;
+        $rezultat = $this->cenitveModel->restore($id);
+        $this->json(['success' => $rezultat]);
     }
 
     public function obnoviCenitve()
     {
-        $body = json_decode(file_get_contents('php://input'), true);
-        $zaObnovo = $body['zaIzbris'];
-        $cenitveModel = new CenitveModel();
-        $rezultat = $cenitveModel->restoreMultiple($zaObnovo);
-        header('Content-Type: application/json');
-        echo json_encode(['success' => $rezultat]);
+        $telo = json_decode(file_get_contents('php://input'), true);
+        $rezultat = $this->cenitveModel->restoreMultiple($telo['zaIzbris']);
+        $this->json(['success' => $rezultat]);
     }
 }

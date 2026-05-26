@@ -2,6 +2,9 @@
 #logo{
     width:5%;
 }
+body{
+    background: linear-gradient(to right, rgb(249, 240, 252), rgb(174, 175, 202));
+}
 .nav-item .nav-link {
     font-size: larger;
     font-weight: bolder;

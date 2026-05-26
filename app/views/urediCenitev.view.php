@@ -54,7 +54,4 @@
 
     </form>
 
-    <?php if(isset($napaka)): ?>
-        <p class="text-danger mt-3"><?= $napaka ?></p>
-    <?php endif; ?>
 </div>
