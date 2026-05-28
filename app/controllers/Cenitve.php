@@ -33,8 +33,8 @@ class Cenitve extends Controller
     public function fill()
     {
         $setup = new SetUp();
-        $setup->reset();
-        $this->view('Home');
+        $setup->resetAppraisals();
+        $this->redirect('/cenitve');
     }
 
     public function index()

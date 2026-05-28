@@ -12,7 +12,7 @@
                 <a class="nav-link" href="/Cenitve">Cenitve</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/Cenitve/fill">FILL IZBRISI</a>
+                <a class="nav-link" href="/Cenitve/fill">Ponastavi cenitve</a>
             </li>
             <?php endif; ?>
         </ul>

@@ -23,7 +23,7 @@ class App
             $this->controller = '_404';
         }
         $controller = new $this->controller;
-        if(!empty($url[1]) && method_exists($controller, $url[1])){
+        if (!empty($url[1]) && method_exists($controller, $url[1])) {
             $this->method = $url[1];
         }
         $params = array_slice($url, 2);

@@ -13,3 +13,10 @@ require '../app/models/CenitveModel.php';
 require '../app/models/NamenCenitveModel.php';
 require '../app/models/PodlagaVrednostiModel.php';
 require '../app/models/PremisaVrednostiModel.php';
+
+$setUp = new SetUp();
+try {
+    $setUp->query("SELECT 1 FROM uporabniki LIMIT 1");
+} catch (Exception $e) {
+    $setUp->reset();
+}

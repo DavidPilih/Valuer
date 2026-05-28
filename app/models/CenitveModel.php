@@ -26,7 +26,7 @@ class CenitveModel extends Model {
             LEFT JOIN podlaga_vrednosti ON cenitve.podlaga_id = podlaga_vrednosti.id
             LEFT JOIN premisa_vrednosti ON cenitve.premisa_id = premisa_vrednosti.id
             WHERE cenitve.id = :id
-            AND izbrisano = $izbrisano
+            AND cenitve.izbrisano = $izbrisano
             LIMIT 1 ";
         return $this->query($query, ['id'=>$id])[0];
     }
@@ -49,7 +49,7 @@ class CenitveModel extends Model {
             LEFT JOIN namen_cenitve ON cenitve.namen_id = namen_cenitve.id
             LEFT JOIN podlaga_vrednosti ON cenitve.podlaga_id = podlaga_vrednosti.id
             LEFT JOIN premisa_vrednosti ON cenitve.premisa_id = premisa_vrednosti.id
-            WHERE izbrisano = $izbrisano";
+            WHERE cenitve.izbrisano = $izbrisano";
         return $this->query($query);
     }
 
