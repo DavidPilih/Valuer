@@ -30,12 +30,6 @@
         <div id="ponovitev_napaka" class="text-danger mt-1" style="display:none;"></div>
     </div>
 
-    <div class="mb-3">
-        <label class="form-check-label">
-            <input type="checkbox" name="zapomni" class="form-check-input"> Zapomni si me
-        </label>
-    </div>
-
     <div class = "ba">
     <a href="/pozabljeno-geslo" class="d-block mb-3">Pozabljeno geslo?</a>
 

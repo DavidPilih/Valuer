@@ -14,21 +14,25 @@ Spletna aplikacija za upravljanje cenitev nepremičnin.
 ```bash
 docker-compose up -d
 ```
-da se podatkovna baza nalozi lahko traja kaksno minutko
+
+Da se podatkovna baza naloži lahko traja kakšno minutko.
 
 Aplikacija bo dostopna na `http://localhost:100`.
 
+Za reset (tudi baze):
 
-Za reset (tudi baze)
 ```bash
-docker-compose down -v. 
+docker-compose down -v
 ```
-
-
 
 ## Funkcionalnosti
 
-- Prijava in registracija uporabnikov + spreminjanje gesl
+- Prijava in registracija uporabnikov + spreminjanje gesla
 - Pregled, dodajanje, urejanje in brisanje cenitev
 - Koš izbrisanih cenitev z možnostjo obnove
 - Filtriranje in sortiranje cenitev
+
+## Privzeti uporabnik
+
+- Email: `janez@gmail.com`
+- Geslo: `pass`

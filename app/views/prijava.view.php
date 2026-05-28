@@ -16,12 +16,6 @@
             <input type="password" id="geslo" name="geslo" class="form-control" required>
         </div>
 
-        <div class="mb-3">
-            <label class="form-check-label">
-                <input type="checkbox" name="zapomni" class="form-check-input"> Zapomni si me
-            </label>
-        </div>
-
         <div class="d-flex flex-column align-items-center gap-2">
             <a href="/pozabljeno-geslo">Pozabljeno geslo?</a>
             <button type="submit" class="btn btn-primary">Prijava</button>
