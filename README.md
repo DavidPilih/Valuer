@@ -17,7 +17,10 @@ docker-compose up -d
 da se podatkovna baza nalozi lahko traja kaksno minutko
 
 Aplikacija bo dostopna na `http://localhost:100`.
-Za reset baze docker-compose down -v. 
+Za reset (tudi baze)
+```bash
+docker-compose down -v. 
+```
 
 
 ## Funkcionalnosti
