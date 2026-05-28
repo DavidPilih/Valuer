@@ -81,21 +81,21 @@ document.addEventListener('DOMContentLoaded', function () {
 function odpriDeleteModal(id) {
     const btn = document.getElementById("confirmDeleteBtn");
     const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-    if(id=='vec'){
-    btn.onclick = async () => {
-        await brisiCenitve(id);
-        modal.hide();
-        if(kos_cenitev) toast_uspeh("Cenitve so bile trajno izbrisane")
-        else toast_uspeh("Cenitve so bile premaknjene v koš")
-    };
-    }else{
-    btn.onclick = async () => {
-        await brisiCenitev(id);
-        modal.hide();
-        if(kos_cenitev) toast_uspeh("Cenitev je bila trajno izbrisana")
-        else toast_uspeh("Cenitev je bila premaknjena v koš")
-    };
-}
+    if (id == 'vec') {
+        btn.onclick = async () => {
+            await brisiCenitve(id);
+            modal.hide();
+            if (kos_cenitev) toast_uspeh("Cenitve so bile trajno izbrisane")
+            else toast_uspeh("Cenitve so bile premaknjene v koš")
+        };
+    } else {
+        btn.onclick = async () => {
+            await brisiCenitev(id);
+            modal.hide();
+            if (kos_cenitev) toast_uspeh("Cenitev je bila trajno izbrisana")
+            else toast_uspeh("Cenitev je bila premaknjena v koš")
+        };
+    }
     modal.show();
 }
 
@@ -104,7 +104,8 @@ function odpriCenitev(id) {
 }
 function filterToogle() {
     const filtri = document.getElementById('filtri');
-    filtri.style.display = filtri.style.display === 'none' ? '' : 'none';
+    if (filtri.style.display == 'none') filtri.style.display = '';
+    else filtri.style.display = 'none';
 }
 
 
@@ -146,34 +147,6 @@ document.getElementById('filter_datum_do')?.addEventListener('change', function 
     filtri.datum_do = this.value;
     filtrirajVrstice();
 });
-
-function filtrirajVrstice() {
-    const vrstice = document.querySelectorAll('tbody tr');
-
-    vrstice.forEach(function (tr) {
-        const naziv = tr.cells[1].textContent.toLowerCase();
-        const namen = tr.cells[4].textContent.toLowerCase();
-        const podlaga = tr.cells[5].textContent.toLowerCase();
-        const premisa = tr.cells[6].textContent.toLowerCase();
-        const uporabnik = tr.cells[7].textContent.toLowerCase();
-        const datumTekst = tr.cells[3].textContent.trim(); // dd.mm.yyyy HH:ii
-
-        const delen = datumTekst.split(' ')[0].split('.');
-        const datumISO = delen.length === 3 ? `${delen[2]}-${delen[1]}-${delen[0]}` : '';
-
-        const vidna =
-            naziv.includes(filtri.naziv) &&
-            namen.includes(filtri.namen) &&
-            podlaga.includes(filtri.podlaga) &&
-            premisa.includes(filtri.premisa) &&
-            uporabnik.includes(filtri.uporabnik) &&
-            (filtri.datum_od === '' || datumISO >= filtri.datum_od) &&
-            (filtri.datum_do === '' || datumISO <= filtri.datum_do);
-
-        tr.style.display = vidna ? '' : 'none';
-    });
-}
-
 function resetFiltre() {
     document.getElementById('filter_naziv').value = '';
     document.getElementById('filter_namen').value = '';
@@ -188,36 +161,82 @@ function resetFiltre() {
 
 let sortSmer = {};
 
-document.querySelectorAll('th.sortable').forEach(function (th) {
+const ths = document.querySelectorAll('th.sortable');
+
+ths.forEach(function (th) {
     th.addEventListener('click', function () {
+
         const col = parseInt(this.dataset.col);
+
         sortSmer[col] = !sortSmer[col];
 
         const tbody = document.querySelector('tbody');
         const vrstice = Array.from(tbody.querySelectorAll('tr'));
 
         vrstice.sort(function (a, b) {
-            const aVal = a.cells[col].textContent.trim().toLowerCase();
-            const bVal = b.cells[col].textContent.trim().toLowerCase();
 
-            if (col === 3) {
-                const parseDate = (str) => {
-                    const d = str.split(' ')[0].split('.');
-                    return d.length === 3 ? `${d[2]}${d[1]}${d[0]}` : '';
-                };
-                return sortSmer[col]
-                    ? parseDate(aVal).localeCompare(parseDate(bVal))
-                    : parseDate(bVal).localeCompare(parseDate(aVal));
+            let aVal = a.cells[col].textContent.trim().toLowerCase();
+            let bVal = b.cells[col].textContent.trim().toLowerCase();
+
+            if (col === 3) { //datum
+
+                function formatDate(str) {
+                    const deli = str.split(' ')[0].split('.');
+
+                    if (deli.length !== 3) return '';
+                    return deli[2] + deli[1] + deli[0];
+                }
+                aVal = formatDate(aVal);
+                bVal = formatDate(bVal);
             }
 
-            return sortSmer[col]
-                ? aVal.localeCompare(bVal)
-                : bVal.localeCompare(aVal);
+            if (sortSmer[col]) return aVal.localeCompare(bVal);
+            else return bVal.localeCompare(aVal);
+            
         });
 
-        document.querySelectorAll('th.sortable i').forEach(i => i.className = 'bi bi-arrow-down-up');
-        this.querySelector('i').className = sortSmer[col] ? 'bi bi-arrow-up' : 'bi bi-arrow-down';
+        const ikone = document.querySelectorAll('th.sortable i');
 
-        vrstice.forEach(tr => tbody.appendChild(tr));
+        ikone.forEach(function (i) {
+            i.className = 'bi bi-arrow-down-up';
+        });
+
+        // trenutni
+        const ikona = this.querySelector('i');
+
+        if (sortSmer[col]) ikona.className = 'bi bi-arrow-up';
+        else ikona.className = 'bi bi-arrow-down';
+        
+        vrstice.forEach(function (tr) {
+            tbody.appendChild(tr);
+        });
     });
 });
+
+function filtrirajVrstice() {
+    const vrstice = document.querySelectorAll('tbody tr');
+
+    vrstice.forEach(function (tr) {
+        const naziv = tr.cells[1].textContent.toLowerCase();
+        const namen = tr.cells[4].textContent.toLowerCase();
+        const podlaga = tr.cells[5].textContent.toLowerCase();
+        const premisa = tr.cells[6].textContent.toLowerCase();
+        const uporabnik = tr.cells[7].textContent.toLowerCase();
+        const datumTekst = tr.cells[3].textContent.trim(); //for dd.mm.yyyy HH:ii
+
+        const datum = datumTekst.split(' ')[0].split('.');
+        const datumISO = `${datum[2]}-${datum[1]}-${datum[0]}`;
+
+        const vidna =
+            naziv.includes(filtri.naziv) &&
+            namen.includes(filtri.namen) &&
+            podlaga.includes(filtri.podlaga) &&
+            premisa.includes(filtri.premisa) &&
+            uporabnik.includes(filtri.uporabnik) &&
+            (filtri.datum_od === '' || datumISO >= filtri.datum_od) &&
+            (filtri.datum_do === '' || datumISO <= filtri.datum_do);
+
+        tr.style.display = vidna ? '' : 'none';
+    });
+}
+

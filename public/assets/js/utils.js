@@ -6,8 +6,6 @@ if (typeof napaka !== "undefined") {
 if (typeof uspeh !== "undefined") {
     toast_uspeh(uspeh);
 }
-console.log("Nkeja00");
-
 
 function toast_uspeh(uspeh) {
     Toastify({

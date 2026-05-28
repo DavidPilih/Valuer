@@ -4,12 +4,13 @@
 <div style="position: relative;" class="box">
     <img src="/assets/images/house.webp" alt="Valuer"
         style="width: 100vw; height: 100vh; object-fit: cover; display: block;">
-    <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.35);"></div>
+
+    <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.35);"></div>
+    
     <h1 style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
                 color: white; font-weight: bold; font-size: 80px; font-style: italic;
-                text-decoration: underline; text-shadow: 2px 4px 12px rgba(0,0,0,0.5);
-                white-space: nowrap;">
-        VALUER
+                text-decoration: underline; text-shadow: 2px 4px 12px rgba(0,0,0,0.5);">
+    VALUER
     </h1>
 </div>
  
@@ -47,7 +48,6 @@
                         Raičeva ulica 5, Maribor
                     </a>
                 </div>
- 
             </div>
         </div>
     </div>

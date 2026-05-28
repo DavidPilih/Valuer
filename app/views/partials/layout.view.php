@@ -14,33 +14,35 @@
     <title>Document</title>
 </head>
 
+
 <body>
+    <?php require "../app/views/partials/navbar.view.php"; ?>
 
-    <body>
-        <?php require "../app/views/partials/navbar.view.php"; ?>
+    <main>
+        <?php require "../app/views/" . $content . ".view.php"; ?>
 
-        <main>
-            <?php require "../app/views/" . $content . ".view.php"; ?>
+        <!-- obvestila -->
+        <?php if (isset($_SESSION['napaka'])): ?>
+            <script>
+                const napaka = <?= json_encode($_SESSION['napaka']) ?>;
+                console.log("napaka");
+            </script>
+            <?php unset($_SESSION['napaka']); ?>
+        <?php endif; ?>
 
-            <!-- obvestila -->
-            <?php if (isset($_SESSION['napaka'])): ?>
-                <script>
-                    const napaka = <?= json_encode($_SESSION['napaka']) ?>;
-                    console.log("napaka");
-                </script>
-                <?php unset($_SESSION['napaka']); ?>
-            <?php endif; ?>
+        <?php if (isset($_SESSION['uspeh'])): ?>
+            <script>
+                const uspeh = <?= json_encode($_SESSION['uspeh']) ?>;
+                console.log("uspeh");
+            </script>
+            <?php unset($_SESSION['uspeh']); ?>
+        <?php endif; ?>
+    </main>
+    <footer>
+        <img id="logo" src="/assets/images/logo.png" alt="logo">
+        <a class="navbar-brand" href="/">Valuer</a>
+    </footer>
 
-            <?php if (isset($_SESSION['uspeh'])): ?>
-                <script>
-                    const uspeh = <?= json_encode($_SESSION['uspeh']) ?>;
-                    console.log("uspeh");
-                </script>
-                <?php unset($_SESSION['uspeh']); ?>
-            <?php endif; ?>
-        </main>
-
-    </body>
 </body>
 
 </html>
